@@ -1,0 +1,17 @@
+.shoppingListForm {
+    &__fields {
+        padding-top: 0.5rem;
+    }
+    &__addProduct {
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+    }
+    &__label {
+        margin-right: 1rem;
+        font-size: 1.8rem;
+    }
+    &__input {
+        width: 100%;
+        padding: 0.5rem;
+    }
+}
