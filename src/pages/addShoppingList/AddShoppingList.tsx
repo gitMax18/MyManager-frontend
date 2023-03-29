@@ -4,14 +4,14 @@ import ShoppingListForm from "../../components/shoppingList/shoppingListForm/Sho
 import { ShoppingListData, ShoppingListApi } from "../../types/shopping";
 
 type Props = {
-    updateShopingList: React.Dispatch<React.SetStateAction<ShoppingListApi[]>>;
+    onAddShoppingList: (shoppingList: ShoppingListApi) => void;
 };
 
-export default function AddShoppingList({ updateShopingList }: Props) {
+export default function AddShoppingList({ onAddShoppingList }: Props) {
     return (
         <MainLayout>
             <h1>Add new shopping list</h1>
-            <ShoppingListForm updateShopingList={updateShopingList} />
+            <ShoppingListForm onAddShoppingList={onAddShoppingList} />
         </MainLayout>
     );
 }

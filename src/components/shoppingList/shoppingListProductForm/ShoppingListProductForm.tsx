@@ -19,7 +19,7 @@ function ShoppingListProductForm({ onAddProduct, validationError }: Props) {
         }
         setIsProductError(false);
         const newProduct: ProductData = {
-            product: productRef.current!.value as string,
+            name: productRef.current!.value as string,
             quantity: +quantityRef.current!.value as number,
         };
 

@@ -1,29 +1,27 @@
 import React, { useRef, FormEvent, useEffect } from "react";
 import "./shoppingListForm.scss";
 import { useState } from "react";
-import {
-    ShoppingListData,
-    ProductData,
-    ShoppingListApi,
-    ShoppingListResponse,
-} from "../../../types/shopping";
+import { ShoppingListData, ProductData, ShoppingListApi } from "../../../types/shopping";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
 import { v4 as uuidv4 } from "uuid";
 import ShoppingListProductForm from "../shoppingListProductForm/ShoppingListProductForm";
 type Props = {
-    updateShopingList: React.Dispatch<React.SetStateAction<ShoppingListApi[]>>;
+    onAddShoppingList: (shoppingList: ShoppingListApi) => void;
 };
 
-function ShoppingListForm({ updateShopingList }: Props) {
+function ShoppingListForm({ onAddShoppingList }: Props) {
     const [products, setProducts] = useState<ProductData[]>([]);
     const [isFormError, setIsFormError] = useState<boolean>(false);
 
     const nameRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
-    const { isLoading, validationError, requestError, data, fetchApi } =
-        useFetch<ShoppingListResponse>("/shoppingList", "POST");
+    const { isLoading, validationError, requestError, data, fetchApi } = useFetch<ShoppingListApi>(
+        "/shoppingList",
+        null,
+        "POST"
+    );
 
     function addProduct(newProduct: ProductData) {
         setProducts(prev => {
@@ -40,13 +38,11 @@ function ShoppingListForm({ updateShopingList }: Props) {
         setIsFormError(false);
         const newShoppingList: ShoppingListData = {
             name: nameRef.current!.value,
-            products,
+            products: products,
         };
 
         await fetchApi(newShoppingList, data => {
-            updateShopingList(prev => {
-                return [...prev, { ...data.data.newShoppingList }];
-            });
+            onAddShoppingList(data);
             navigate("/shoppingLists");
         });
     }
@@ -74,7 +70,7 @@ function ShoppingListForm({ updateShopingList }: Props) {
             {products.map(product => {
                 return (
                     <div key={uuidv4()}>
-                        {product.product} / {product.quantity}
+                        {product.name} / {product.quantity}
                     </div>
                 );
             })}

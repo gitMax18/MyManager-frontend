@@ -4,9 +4,9 @@ type Method = "PUT" | "GET" | "DELETE" | "POST";
 
 const baseUrl = "http://localhost:3000";
 
-export default function useFetch<T>(endPoint: string, method: Method = "GET") {
+export default function useFetch<T>(endPoint: string, defaultValue: any, method: Method = "GET") {
     const [isLoading, setIsloading] = useState<boolean>(false);
-    const [data, setData] = useState<T | null>(null);
+    const [data, setData] = useState<T>(defaultValue);
     const [validationError, setValidationError] = useState<any>(null);
     const [requestError, setRequestError] = useState<string>("");
 
@@ -15,6 +15,7 @@ export default function useFetch<T>(endPoint: string, method: Method = "GET") {
         setRequestError("");
         setIsloading(true);
         try {
+            console.log("fetching data...");
             const response = await fetch(baseUrl + endPoint, {
                 method,
                 headers: {
@@ -27,12 +28,13 @@ export default function useFetch<T>(endPoint: string, method: Method = "GET") {
                 setValidationError(data);
                 return;
             }
-            setData(data);
+            setData(data.data);
             if (onSuccess) {
-                onSuccess(data);
+                onSuccess(data.data);
             }
         } catch (error) {
             setRequestError("Request failled, please retry after...");
+            console.log(error);
         } finally {
             setIsloading(false);
         }
@@ -44,5 +46,5 @@ export default function useFetch<T>(endPoint: string, method: Method = "GET") {
         }
     }, [endPoint]);
 
-    return { isLoading, data, requestError, validationError, fetchApi };
+    return { isLoading, data, setData, requestError, validationError, fetchApi };
 }

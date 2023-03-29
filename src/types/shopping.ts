@@ -4,14 +4,17 @@ export type ShoppingListData = {
 };
 
 export type ProductData = {
-    product: string;
+    name: string;
     quantity: number;
 };
 
-export type ShoppingListResponse = {
-    data: {
-        newShoppingList: ShoppingListApi;
-    };
+export type ShoppingListPostResponse = {
+    data: ShoppingListApi;
+    message: string;
+};
+
+export type ShoppingListGetAllResponse = {
+    data: ShoppingListApi[];
     message: string;
 };
 
@@ -20,7 +23,7 @@ export type ShoppingListApi = {
     id: number;
     name: string;
     updatedAt: string;
-    products?: ProductApi[];
+    products: ProductApi[];
 };
 
 export type ProductApi = {
@@ -29,5 +32,5 @@ export type ProductApi = {
     quantity: number;
     shoppingListId: number;
     updatedAt: string;
-    product: string;
+    name: string;
 };

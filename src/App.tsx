@@ -2,11 +2,21 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Homepage from "./pages/homepage/Homepage";
 import ShoppingLists from "./pages/shoppingLists/ShoppingLists";
 import AddShoppingList from "./pages/addShoppingList/AddShoppingList";
-import { useState } from "react";
 import { ShoppingListApi } from "./types/shopping";
+import ShoppingList from "./pages/shoppingList/ShoppingList";
+import useFetch from "./hooks/useFetch";
 
 function App() {
-    const [shoppingLists, setShoppingList] = useState<ShoppingListApi[]>([]);
+    const { data: shoppingLists, setData: setShoppingLists } = useFetch<ShoppingListApi[]>(
+        "/shoppingList",
+        []
+    );
+
+    function addShoppingList(shoppingList: ShoppingListApi) {
+        setShoppingLists(prev => {
+            return [...prev, shoppingList];
+        });
+    }
 
     const router = createBrowserRouter([
         {
@@ -18,8 +28,12 @@ function App() {
             element: <ShoppingLists shoppingLists={shoppingLists} />,
         },
         {
+            path: "/shoppingLists/:id",
+            element: <ShoppingList shoppingLists={shoppingLists} />,
+        },
+        {
             path: "/shoppingLists/add",
-            element: <AddShoppingList updateShopingList={setShoppingList} />,
+            element: <AddShoppingList onAddShoppingList={addShoppingList} />,
         },
     ]);
 
