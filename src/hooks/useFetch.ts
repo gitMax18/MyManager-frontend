@@ -28,10 +28,12 @@ export default function useFetch<T>(endPoint: string, method: Method = "GET") {
                 setValidationError(data);
                 return;
             }
-            setData(data.data);
+            // if on success is ussed we don't set data in the hook
             if (onSuccess) {
                 onSuccess(data.data);
+                return;
             }
+            setData(data.data);
         } catch (error) {
             setRequestError("Request failled, please retry after...");
             console.log(error);
