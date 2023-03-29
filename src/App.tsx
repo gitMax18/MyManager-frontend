@@ -3,10 +3,10 @@ import Homepage from "./pages/homepage/Homepage";
 import ShoppingLists from "./pages/shoppingLists/ShoppingLists";
 import AddShoppingList from "./pages/addShoppingList/AddShoppingList";
 import { useState } from "react";
-import { ShoppingList } from "./types/shopping";
+import { ShoppingListApi } from "./types/shopping";
 
 function App() {
-    const [shoppingLists, setShoppingList] = useState<ShoppingList[]>([]);
+    const [shoppingLists, setShoppingList] = useState<ShoppingListApi[]>([]);
 
     const router = createBrowserRouter([
         {

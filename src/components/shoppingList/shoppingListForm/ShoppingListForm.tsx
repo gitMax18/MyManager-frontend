@@ -1,14 +1,20 @@
 import React, { useRef, FormEvent } from "react";
 import "./shoppingListForm.scss";
 import { useState } from "react";
-import { ShoppingList, ShoppingRow } from "../../../types/shopping";
+import {
+    ShoppingListData,
+    ProductData,
+    ShoppingListApi,
+    ShoppingListResponse,
+} from "../../../types/shopping";
 import { useNavigate } from "react-router-dom";
+import useFetch from "../../../hooks/useFetch";
 type Props = {
-    updateShopingList: React.Dispatch<React.SetStateAction<ShoppingList[]>>;
+    updateShopingList: React.Dispatch<React.SetStateAction<ShoppingListApi[]>>;
 };
 
 function ShoppingListForm({ updateShopingList }: Props) {
-    const [products, setProducts] = useState<ShoppingRow[]>([]);
+    const [products, setProducts] = useState<ProductData[]>([]);
 
     const [isProductError, setIsProductError] = useState<boolean>(false);
     const [isFormError, setIsFormError] = useState<boolean>(false);
@@ -16,6 +22,11 @@ function ShoppingListForm({ updateShopingList }: Props) {
     const productRef = useRef<HTMLInputElement>(null);
     const quantityRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
+
+    const { isLoading, error, data, fetchApi } = useFetch<ShoppingListResponse>(
+        "/shoppingList",
+        "POST"
+    );
 
     const navigate = useNavigate();
 
@@ -25,7 +36,7 @@ function ShoppingListForm({ updateShopingList }: Props) {
             return;
         }
         setIsProductError(false);
-        const newProduct: ShoppingRow = {
+        const newProduct: ProductData = {
             product: productRef.current!.value as string,
             quantity: +quantityRef.current!.value as number,
         };
@@ -35,22 +46,24 @@ function ShoppingListForm({ updateShopingList }: Props) {
         resetProductRow();
     }
 
-    function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (nameRef.current?.value === "") {
             setIsFormError(true);
             return;
         }
         setIsFormError(false);
-        const newShoppingList: ShoppingList = {
-            name: nameRef.current?.value as string,
-            createdAt: Date.now(),
+        const newShoppingList: ShoppingListData = {
+            name: nameRef.current!.value,
             products,
         };
-        updateShopingList(prev => {
-            return [...prev, newShoppingList];
+
+        await fetchApi(newShoppingList, data => {
+            updateShopingList(prev => {
+                return [...prev, { ...data.data.newShoppingList }];
+            });
+            navigate("/shoppingLists");
         });
-        navigate("/shoppingLists");
     }
 
     function resetProductRow() {

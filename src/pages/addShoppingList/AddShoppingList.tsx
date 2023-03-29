@@ -1,10 +1,10 @@
 import React from "react";
 import MainLayout from "../../layouts/mainLayout/MainLayout";
 import ShoppingListForm from "../../components/shoppingList/shoppingListForm/ShoppingListForm";
-import { ShoppingList } from "../../types/shopping";
+import { ShoppingListData, ShoppingListApi } from "../../types/shopping";
 
 type Props = {
-    updateShopingList: React.Dispatch<React.SetStateAction<ShoppingList[]>>;
+    updateShopingList: React.Dispatch<React.SetStateAction<ShoppingListApi[]>>;
 };
 
 export default function AddShoppingList({ updateShopingList }: Props) {

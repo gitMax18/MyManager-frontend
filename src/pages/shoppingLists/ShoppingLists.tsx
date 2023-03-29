@@ -1,10 +1,10 @@
 import React from "react";
 import MainLayout from "../../layouts/mainLayout/MainLayout";
 import { useNavigate } from "react-router-dom";
-import { ShoppingList } from "../../types/shopping";
+import { ShoppingListApi } from "../../types/shopping";
 
 type Props = {
-    shoppingLists: ShoppingList[];
+    shoppingLists: ShoppingListApi[];
 };
 
 export default function ShoppingLists({ shoppingLists }: Props) {
@@ -15,16 +15,16 @@ export default function ShoppingLists({ shoppingLists }: Props) {
             <button onClick={() => navigate("/shoppingLists/add")}>Add list</button>
             {shoppingLists.map(list => {
                 return (
-                    <>
-                        <div key={Date.now()}>{list.name}</div>
-                        {list.products.map(product => {
+                    <div key={list.id}>
+                        <div>{list.name}</div>
+                        {list.products?.map(product => {
                             return (
-                                <div>
+                                <div key={"product" + product.id}>
                                     {product.product} / {product.quantity}
                                 </div>
                             );
                         })}
-                    </>
+                    </div>
                 );
             })}
         </MainLayout>
