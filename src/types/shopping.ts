@@ -7,7 +7,6 @@ export type ProductData = {
     name: string;
     quantity: number;
 };
-
 export type ShoppingListPostResponse = {
     data: ShoppingListApi;
     message: string;
