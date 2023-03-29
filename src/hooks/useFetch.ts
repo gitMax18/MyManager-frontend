@@ -7,10 +7,12 @@ const baseUrl = "http://localhost:3000";
 export default function useFetch<T>(endPoint: string, method: Method = "GET") {
     const [isLoading, setIsloading] = useState<boolean>(false);
     const [data, setData] = useState<T | null>(null);
-    const [error, setError] = useState<any>(null);
+    const [validationError, setValidationError] = useState<any>(null);
+    const [requestError, setRequestError] = useState<string>("");
 
     async function fetchApi(body: any = null, onSuccess?: (data: T) => void) {
-        setError(null);
+        setValidationError(null);
+        setRequestError("");
         setIsloading(true);
         try {
             const response = await fetch(baseUrl + endPoint, {
@@ -20,16 +22,17 @@ export default function useFetch<T>(endPoint: string, method: Method = "GET") {
                 },
                 body: body ? JSON.stringify(body) : null,
             });
-            if (!response.ok) {
-                throw new Error("une erreur s'est produite");
-            }
             const data = await response.json();
+            if (!response.ok) {
+                setValidationError(data);
+                return;
+            }
             setData(data);
             if (onSuccess) {
                 onSuccess(data);
             }
         } catch (error) {
-            setError(error);
+            setRequestError("Request failled, please retry after...");
         } finally {
             setIsloading(false);
         }
@@ -41,5 +44,5 @@ export default function useFetch<T>(endPoint: string, method: Method = "GET") {
         }
     }, [endPoint]);
 
-    return { isLoading, data, error, fetchApi };
+    return { isLoading, data, requestError, validationError, fetchApi };
 }

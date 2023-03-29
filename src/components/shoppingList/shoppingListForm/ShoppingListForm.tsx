@@ -1,4 +1,4 @@
-import React, { useRef, FormEvent } from "react";
+import React, { useRef, FormEvent, useEffect } from "react";
 import "./shoppingListForm.scss";
 import { useState } from "react";
 import {
@@ -23,12 +23,10 @@ function ShoppingListForm({ updateShopingList }: Props) {
     const quantityRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
 
-    const { isLoading, error, data, fetchApi } = useFetch<ShoppingListResponse>(
-        "/shoppingList",
-        "POST"
-    );
-
     const navigate = useNavigate();
+
+    const { isLoading, validationError, requestError, data, fetchApi } =
+        useFetch<ShoppingListResponse>("/shoppingList", "POST");
 
     function handleAddProduct() {
         if (productRef.current?.value === "" || quantityRef.current?.value === "") {
@@ -75,7 +73,10 @@ function ShoppingListForm({ updateShopingList }: Props) {
 
     return (
         <form className="shoppingListForm" onSubmit={handleSubmit}>
+            {isLoading && <p>Chargement...</p>}
+            {requestError && <p>{requestError}</p>}
             {isFormError && <p>Veuillez ajouter un nom </p>}
+            {validationError?.details?.name && <p>{validationError.details.name}</p>}
             <div className="shoppingListForm__fields">
                 <label className="shoppingListForm__label" htmlFor="name">
                     Name
@@ -90,6 +91,7 @@ function ShoppingListForm({ updateShopingList }: Props) {
             </div>
             <h2>add new +</h2>
             {isProductError && <p>Veuillez entrer des valeurs</p>}
+            {validationError?.details?.products && <p>{validationError.details.products}</p>}
             <div className="shoppingListForm__addProduct">
                 <div className="shoppingListForm__fields">
                     <label className="shoppingListForm__label" htmlFor="product">
