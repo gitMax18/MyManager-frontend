@@ -19,7 +19,6 @@ function ShoppingListForm({ onAddShoppingList }: Props) {
 
     const { isLoading, validationError, requestError, data, fetchApi } = useFetch<ShoppingListApi>(
         "/shoppingList",
-        null,
         "POST"
     );
 

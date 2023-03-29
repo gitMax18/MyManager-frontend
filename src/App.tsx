@@ -7,14 +7,15 @@ import ShoppingList from "./pages/shoppingList/ShoppingList";
 import useFetch from "./hooks/useFetch";
 
 function App() {
-    const { data: shoppingLists, setData: setShoppingLists } = useFetch<ShoppingListApi[]>(
-        "/shoppingList",
-        []
-    );
+    const { data: shoppingLists, setData: setShoppingLists } =
+        useFetch<ShoppingListApi[]>("/shoppingList");
 
     function addShoppingList(shoppingList: ShoppingListApi) {
         setShoppingLists(prev => {
-            return [...prev, shoppingList];
+            if (prev !== null) {
+                return [...prev, shoppingList];
+            }
+            return [shoppingList];
         });
     }
 

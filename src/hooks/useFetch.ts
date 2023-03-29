@@ -4,9 +4,9 @@ type Method = "PUT" | "GET" | "DELETE" | "POST";
 
 const baseUrl = "http://localhost:3000";
 
-export default function useFetch<T>(endPoint: string, defaultValue: any, method: Method = "GET") {
+export default function useFetch<T>(endPoint: string, method: Method = "GET") {
     const [isLoading, setIsloading] = useState<boolean>(false);
-    const [data, setData] = useState<T>(defaultValue);
+    const [data, setData] = useState<T | null>(null);
     const [validationError, setValidationError] = useState<any>(null);
     const [requestError, setRequestError] = useState<string>("");
 

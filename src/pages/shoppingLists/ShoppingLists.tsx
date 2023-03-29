@@ -4,7 +4,7 @@ import { ShoppingListApi } from "../../types/shopping";
 import ShoppingListCard from "../../components/shoppingList/shoppingListCard/ShoppingListCard";
 
 type Props = {
-    shoppingLists: ShoppingListApi[];
+    shoppingLists: ShoppingListApi[] | null;
 };
 
 export default function ShoppingLists({ shoppingLists }: Props) {
@@ -14,7 +14,7 @@ export default function ShoppingLists({ shoppingLists }: Props) {
         <MainLayout>
             <h1>Shopping lists</h1>
             <button onClick={() => navigate("/shoppingLists/add")}>Add list</button>
-            {shoppingLists.map(list => (
+            {shoppingLists?.map(list => (
                 <ShoppingListCard key={list.id} shoppingList={list} />
             ))}
         </MainLayout>

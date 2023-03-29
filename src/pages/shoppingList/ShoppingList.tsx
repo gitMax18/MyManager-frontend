@@ -1,11 +1,11 @@
 import React from "react";
 import { ShoppingListApi } from "../../types/shopping";
 import { Navigate, useParams } from "react-router-dom";
-import Product from "../../components/shoppingList/productApi/Product";
+import Product from "../../components/shoppingList/product/Product";
 import MainLayout from "../../layouts/mainLayout/MainLayout";
 
 type Props = {
-    shoppingLists: ShoppingListApi[];
+    shoppingLists: ShoppingListApi[] | null;
 };
 
 function ShoppingList({ shoppingLists }: Props) {
@@ -14,7 +14,7 @@ function ShoppingList({ shoppingLists }: Props) {
         return <Navigate to="/shoppingLists" replace={true} />;
     }
 
-    const shoppingList = shoppingLists.find(list => list.id === +id);
+    const shoppingList = shoppingLists?.find(list => list.id === +id);
 
     if (!shoppingList) {
         return (
