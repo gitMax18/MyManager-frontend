@@ -9,39 +9,26 @@ import {
 } from "../../../types/shopping";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
+import { v4 as uuidv4 } from "uuid";
+import ShoppingListProductForm from "../shoppingListProductForm/ShoppingListProductForm";
 type Props = {
     updateShopingList: React.Dispatch<React.SetStateAction<ShoppingListApi[]>>;
 };
 
 function ShoppingListForm({ updateShopingList }: Props) {
     const [products, setProducts] = useState<ProductData[]>([]);
-
-    const [isProductError, setIsProductError] = useState<boolean>(false);
     const [isFormError, setIsFormError] = useState<boolean>(false);
 
-    const productRef = useRef<HTMLInputElement>(null);
-    const quantityRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
-
     const navigate = useNavigate();
 
     const { isLoading, validationError, requestError, data, fetchApi } =
         useFetch<ShoppingListResponse>("/shoppingList", "POST");
 
-    function handleAddProduct() {
-        if (productRef.current?.value === "" || quantityRef.current?.value === "") {
-            setIsProductError(true);
-            return;
-        }
-        setIsProductError(false);
-        const newProduct: ProductData = {
-            product: productRef.current!.value as string,
-            quantity: +quantityRef.current!.value as number,
-        };
+    function addProduct(newProduct: ProductData) {
         setProducts(prev => {
             return [...prev, newProduct];
         });
-        resetProductRow();
     }
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -64,13 +51,6 @@ function ShoppingListForm({ updateShopingList }: Props) {
         });
     }
 
-    function resetProductRow() {
-        if (productRef.current && quantityRef.current) {
-            productRef.current.value = "";
-            quantityRef.current.value = "1";
-        }
-    }
-
     return (
         <form className="shoppingListForm" onSubmit={handleSubmit}>
             {isLoading && <p>Chargement...</p>}
@@ -90,41 +70,10 @@ function ShoppingListForm({ updateShopingList }: Props) {
                 />
             </div>
             <h2>add new +</h2>
-            {isProductError && <p>Veuillez entrer des valeurs</p>}
-            {validationError?.details?.products && <p>{validationError.details.products}</p>}
-            <div className="shoppingListForm__addProduct">
-                <div className="shoppingListForm__fields">
-                    <label className="shoppingListForm__label" htmlFor="product">
-                        Product
-                    </label>
-                    <input
-                        className="shoppingListForm__input"
-                        type="text"
-                        id="product"
-                        name="name"
-                        ref={productRef}
-                    />
-                </div>
-                <div className="shoppingListForm__fields">
-                    <label className="shoppingListForm__label" htmlFor="product">
-                        Quantity
-                    </label>
-                    <input
-                        className="shoppingListForm__input"
-                        type="number"
-                        id="quantity"
-                        name="quantity"
-                        ref={quantityRef}
-                        defaultValue={1}
-                    />
-                </div>
-            </div>
-            <button onClick={handleAddProduct} type="button">
-                add
-            </button>
+            <ShoppingListProductForm onAddProduct={addProduct} validationError={validationError} />
             {products.map(product => {
                 return (
-                    <div key={product.product}>
+                    <div key={uuidv4()}>
                         {product.product} / {product.quantity}
                     </div>
                 );
