@@ -46,6 +46,12 @@ function ShoppingListForm({ onAddShoppingList }: Props) {
         });
     }
 
+    function handleDeleteProduct(index: number) {
+        setProducts(products => {
+            return products.filter((product, pIndex) => pIndex !== index);
+        });
+    }
+
     return (
         <form className="shoppingListForm" onSubmit={handleSubmit}>
             {isLoading && <p>Chargement...</p>}
@@ -66,10 +72,13 @@ function ShoppingListForm({ onAddShoppingList }: Props) {
             </div>
             <h2>add new +</h2>
             <ShoppingListProductForm onAddProduct={addProduct} validationError={validationError} />
-            {products.map(product => {
+            {products.map((product, index) => {
                 return (
                     <div key={uuidv4()}>
-                        {product.name} / {product.quantity}
+                        <div>
+                            {product.name} / {product.quantity}
+                        </div>
+                        <button onClick={() => handleDeleteProduct(index)}>X</button>
                     </div>
                 );
             })}
