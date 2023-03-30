@@ -28,6 +28,18 @@ function App() {
         });
     }
 
+    function deleteProductToShoppingList(productId: number, shoppingListId: number) {
+        setShoppingLists(prev => {
+            if (!prev) return null;
+            const shoppingList = prev.find(list => list.id === shoppingListId);
+            if (!shoppingList) return prev;
+            shoppingList.products = shoppingList.products.filter(product => {
+                return product.id !== productId;
+            });
+            return [...prev];
+        });
+    }
+
     const router = createBrowserRouter([
         {
             path: "/",
@@ -42,6 +54,7 @@ function App() {
             element: (
                 <ShoppingList
                     onAddProduct={addProductToShoppingList}
+                    onDeleteProduct={deleteProductToShoppingList}
                     shoppingLists={shoppingLists}
                 />
             ),

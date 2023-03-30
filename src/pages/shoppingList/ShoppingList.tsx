@@ -9,14 +9,15 @@ import useFetch from "../../hooks/useFetch";
 type Props = {
     shoppingLists: ShoppingListApi[] | null;
     onAddProduct: (product: ProductApi) => void;
+    onDeleteProduct: (productId: number, shoppingListId: number) => void;
 };
 
-function ShoppingList({ shoppingLists, onAddProduct }: Props) {
+function ShoppingList({ shoppingLists, onAddProduct, onDeleteProduct }: Props) {
     const { id } = useParams();
     if (!id) {
         return <Navigate to="/shoppingLists" replace={true} />;
     }
-    const { fetchApi } = useFetch<ProductApi>("/product/" + id, "POST");
+    const { fetchApi, validationError } = useFetch<ProductApi>("/product/" + id, "POST");
 
     const shoppingList = shoppingLists?.find(list => list.id === +id);
 
@@ -37,10 +38,10 @@ function ShoppingList({ shoppingLists, onAddProduct }: Props) {
     return (
         <MainLayout>
             <h1>{shoppingList.name}</h1>
-            <ShoppingListProductForm onAddProduct={addProduct} validationError={null} />
+            <ShoppingListProductForm onAddProduct={addProduct} validationError={validationError} />
             <div>
                 {shoppingList.products.map(product => (
-                    <Product key={product.id} product={product} />
+                    <Product key={product.id} product={product} onDeleteProduct={onDeleteProduct} />
                 ))}
             </div>
         </MainLayout>
