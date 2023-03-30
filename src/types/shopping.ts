@@ -32,4 +32,5 @@ export type ProductApi = {
     shoppingListId: number;
     updatedAt: string;
     name: string;
+    price?: number;
 };

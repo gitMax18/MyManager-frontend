@@ -50,6 +50,18 @@ function App() {
         });
     }
 
+    function updateProductToShoppingList(product: ProductApi) {
+        setShoppingLists(prev => {
+            if (!prev) return null;
+            const shoppingList = prev.find(list => list.id === product.shoppingListId);
+            if (!shoppingList) return prev;
+            const index = shoppingList.products.findIndex(p => p.id === product.id);
+            if (index === -1) return prev;
+            shoppingList.products.splice(index, 1, product);
+            return [...prev];
+        });
+    }
+
     const router = createBrowserRouter([
         {
             path: "/",
@@ -66,6 +78,7 @@ function App() {
                     onDeleteShoppingList={deleteShoppingList}
                     onAddProduct={addProductToShoppingList}
                     onDeleteProduct={deleteProductToShoppingList}
+                    onUpdateProduct={updateProductToShoppingList}
                     shoppingLists={shoppingLists}
                 />
             ),

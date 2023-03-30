@@ -11,6 +11,7 @@ type Props = {
     onAddProduct: (product: ProductApi) => void;
     onDeleteProduct: (productId: number, shoppingListId: number) => void;
     onDeleteShoppingList: (shoppingListId: number) => void;
+    onUpdateProduct: (product: ProductApi) => void;
 };
 
 function ShoppingList({
@@ -18,6 +19,7 @@ function ShoppingList({
     onAddProduct,
     onDeleteProduct,
     onDeleteShoppingList,
+    onUpdateProduct,
 }: Props) {
     const { id } = useParams();
     if (!id) {
@@ -59,7 +61,12 @@ function ShoppingList({
             <ShoppingListProductForm onAddProduct={addProduct} validationError={validationError} />
             <div>
                 {shoppingList.products.map(product => (
-                    <Product key={product.id} product={product} onDeleteProduct={onDeleteProduct} />
+                    <Product
+                        key={product.id}
+                        product={product}
+                        onDeleteProduct={onDeleteProduct}
+                        onUpdateProduct={onUpdateProduct}
+                    />
                 ))}
             </div>
         </MainLayout>
