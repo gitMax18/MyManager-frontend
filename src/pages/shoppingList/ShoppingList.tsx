@@ -1,6 +1,6 @@
 import React from "react";
 import { ShoppingListApi, ProductData, ProductApi } from "../../types/shopping";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Product from "../../components/shoppingList/product/Product";
 import MainLayout from "../../layouts/mainLayout/MainLayout";
 import ShoppingListProductForm from "../../components/shoppingList/shoppingListProductForm/ShoppingListProductForm";
@@ -10,14 +10,24 @@ type Props = {
     shoppingLists: ShoppingListApi[] | null;
     onAddProduct: (product: ProductApi) => void;
     onDeleteProduct: (productId: number, shoppingListId: number) => void;
+    onDeleteShoppingList: (shoppingListId: number) => void;
 };
 
-function ShoppingList({ shoppingLists, onAddProduct, onDeleteProduct }: Props) {
+function ShoppingList({
+    shoppingLists,
+    onAddProduct,
+    onDeleteProduct,
+    onDeleteShoppingList,
+}: Props) {
     const { id } = useParams();
     if (!id) {
         return <Navigate to="/shoppingLists" replace={true} />;
     }
+    const navigate = useNavigate();
     const { fetchApi, validationError } = useFetch<ProductApi>("/product/" + id, "POST");
+
+    const { fetchApi: deleteListFetch, validationError: deleteListValidationError } =
+        useFetch<ShoppingListApi>("/shoppingList/" + id, "DELETE");
 
     const shoppingList = shoppingLists?.find(list => list.id === +id);
 
@@ -35,9 +45,17 @@ function ShoppingList({ shoppingLists, onAddProduct, onDeleteProduct }: Props) {
         });
     }
 
+    function handleDeleteShoppingList() {
+        deleteListFetch(null, data => {
+            onDeleteShoppingList(data.id);
+            navigate("/shoppingLists");
+        });
+    }
+
     return (
         <MainLayout>
             <h1>{shoppingList.name}</h1>
+            <button onClick={handleDeleteShoppingList}>delete shopping list</button>
             <ShoppingListProductForm onAddProduct={addProduct} validationError={validationError} />
             <div>
                 {shoppingList.products.map(product => (

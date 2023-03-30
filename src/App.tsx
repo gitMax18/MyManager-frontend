@@ -19,6 +19,16 @@ function App() {
         });
     }
 
+    function deleteShoppingList(shoppingListId: number) {
+        setShoppingLists(prev => {
+            if (!prev) return null;
+            const newShoppingList = prev.filter(list => {
+                return list.id !== shoppingListId;
+            });
+            return newShoppingList;
+        });
+    }
+
     function addProductToShoppingList(product: ProductApi) {
         setShoppingLists(prev => {
             if (!prev) return null;
@@ -53,6 +63,7 @@ function App() {
             path: "/shoppingLists/:id",
             element: (
                 <ShoppingList
+                    onDeleteShoppingList={deleteShoppingList}
                     onAddProduct={addProductToShoppingList}
                     onDeleteProduct={deleteProductToShoppingList}
                     shoppingLists={shoppingLists}

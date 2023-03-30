@@ -1,4 +1,3 @@
-import React from "react";
 import { ProductApi } from "../../../types/shopping";
 import "./product.scss";
 import useFetch from "../../../hooks/useFetch";
