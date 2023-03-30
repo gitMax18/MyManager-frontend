@@ -33,7 +33,9 @@ function App() {
         setShoppingLists(prev => {
             if (!prev) return null;
             const shoppingList = prev.find(list => list.id === product.shoppingListId);
-            shoppingList?.products.push(product);
+            if (!shoppingList) return prev;
+            shoppingList.products.push(product);
+            shoppingList.products = [...shoppingList?.products];
             return [...prev];
         });
     }
@@ -58,6 +60,7 @@ function App() {
             const index = shoppingList.products.findIndex(p => p.id === product.id);
             if (index === -1) return prev;
             shoppingList.products.splice(index, 1, product);
+            shoppingList.products = [...shoppingList.products];
             return [...prev];
         });
     }

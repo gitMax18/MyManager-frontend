@@ -5,6 +5,7 @@ import Product from "../../components/shoppingList/product/Product";
 import MainLayout from "../../layouts/mainLayout/MainLayout";
 import ShoppingListProductForm from "../../components/shoppingList/shoppingListProductForm/ShoppingListProductForm";
 import useFetch from "../../hooks/useFetch";
+import { useMemo } from "react";
 
 type Props = {
     shoppingLists: ShoppingListApi[] | null;
@@ -33,6 +34,18 @@ function ShoppingList({
 
     const shoppingList = shoppingLists?.find(list => list.id === +id);
 
+    const total = useMemo(() => {
+        let total = 0;
+        if (!shoppingList) return total;
+        if (!shoppingList.products) return total;
+        shoppingList.products.forEach(product => {
+            if (product.price) {
+                total += product.price;
+            }
+        });
+        return total;
+    }, [shoppingList?.products]);
+
     if (!shoppingList) {
         return (
             <div>
@@ -40,6 +53,13 @@ function ShoppingList({
             </div>
         );
     }
+
+    // const total: number = useMemo(() => {
+    //     return shoppingList.products.reduce(
+    //         (acc, curr) => (acc += curr.price === undefined ? 0 : curr.price),
+    //         0
+    //     );
+    // }, [shoppingList.products]);
 
     function addProduct(product: ProductData) {
         fetchApi(product, product => {
@@ -69,6 +89,7 @@ function ShoppingList({
                     />
                 ))}
             </div>
+            <div>Total : {total}</div>
         </MainLayout>
     );
 }

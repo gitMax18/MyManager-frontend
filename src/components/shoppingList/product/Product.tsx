@@ -1,7 +1,7 @@
 import { ProductApi } from "../../../types/shopping";
 import "./product.scss";
 import useFetch from "../../../hooks/useFetch";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 
 type Props = {
     product: ProductApi;
