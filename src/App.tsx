@@ -34,9 +34,10 @@ function App() {
             if (!prev) return null;
             const shoppingList = prev.find(list => list.id === product.shoppingListId);
             if (!shoppingList) return prev;
+            const newShoppingLists = prev.filter(sl => sl.id !== shoppingList.id);
             shoppingList.products.push(product);
             shoppingList.products = [...shoppingList?.products];
-            return [...prev, { ...shoppingList }];
+            return [...newShoppingLists, { ...shoppingList }];
         });
     }
 
@@ -45,10 +46,11 @@ function App() {
             if (!prev) return null;
             const shoppingList = prev.find(list => list.id === shoppingListId);
             if (!shoppingList) return prev;
+            const newShoppingLists = prev.filter(sl => sl.id !== shoppingList.id);
             shoppingList.products = shoppingList.products.filter(product => {
                 return product.id !== productId;
             });
-            return [...prev, { ...shoppingList }];
+            return [...newShoppingLists, { ...shoppingList }];
         });
     }
 
@@ -57,11 +59,12 @@ function App() {
             if (!prev) return null;
             const shoppingList = prev.find(list => list.id === product.shoppingListId);
             if (!shoppingList) return prev;
+            const newShoppingLists = prev.filter(sl => sl.id !== shoppingList.id);
             const index = shoppingList.products.findIndex(p => p.id === product.id);
             if (index === -1) return prev;
             shoppingList.products.splice(index, 1, product);
             shoppingList.products = [...shoppingList.products];
-            return [...prev, { ...shoppingList }];
+            return [...newShoppingLists, { ...shoppingList }];
         });
     }
 
