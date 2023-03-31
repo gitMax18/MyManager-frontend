@@ -36,7 +36,7 @@ function App() {
             if (!shoppingList) return prev;
             shoppingList.products.push(product);
             shoppingList.products = [...shoppingList?.products];
-            return [...prev];
+            return [...prev, { ...shoppingList }];
         });
     }
 
@@ -48,7 +48,7 @@ function App() {
             shoppingList.products = shoppingList.products.filter(product => {
                 return product.id !== productId;
             });
-            return [...prev];
+            return [...prev, { ...shoppingList }];
         });
     }
 
@@ -61,7 +61,7 @@ function App() {
             if (index === -1) return prev;
             shoppingList.products.splice(index, 1, product);
             shoppingList.products = [...shoppingList.products];
-            return [...prev];
+            return [...prev, { ...shoppingList }];
         });
     }
 
