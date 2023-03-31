@@ -10,7 +10,7 @@ export default function useFetch<T>(endPoint: string, method: Method = "GET") {
     const [validationError, setValidationError] = useState<any>(null);
     const [requestError, setRequestError] = useState<string>("");
 
-    async function fetchApi(body: any = null, onSuccess?: (data: T) => void) {
+    async function fetchApi(body: Partial<T | null> = null, onSuccess?: (data: T) => void) {
         setValidationError(null);
         setRequestError("");
         setIsloading(true);

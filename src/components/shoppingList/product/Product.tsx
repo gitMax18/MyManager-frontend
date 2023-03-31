@@ -1,7 +1,7 @@
 import { ProductApi } from "../../../types/shopping";
 import "./product.scss";
 import useFetch from "../../../hooks/useFetch";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 type Props = {
     product: ProductApi;
@@ -10,9 +10,12 @@ type Props = {
 };
 
 export default function Product({ product, onDeleteProduct, onUpdateProduct }: Props) {
+    const [isUpdateProduct, setIsUpdateProduct] = useState(false);
     const { fetchApi } = useFetch<ProductApi>("/product/" + product.id, "DELETE");
     const { fetchApi: updateProductFetch } = useFetch<ProductApi>("/product/" + product.id, "PUT");
     const priceRef = useRef<HTMLInputElement>(null);
+    const nameRef = useRef<HTMLInputElement>(null);
+    const quantityRef = useRef<HTMLInputElement>(null);
 
     function handleDeleteProduct() {
         fetchApi(null, data => {
@@ -22,7 +25,6 @@ export default function Product({ product, onDeleteProduct, onUpdateProduct }: P
 
     function handlePrice() {
         if (!priceRef.current) return;
-        console.log(+priceRef.current.value);
         if (+priceRef.current.value !== product.price) {
             updateProductFetch(
                 {
@@ -35,9 +37,35 @@ export default function Product({ product, onDeleteProduct, onUpdateProduct }: P
             );
         }
     }
+
+    function handleDoubleClick() {
+        setIsUpdateProduct(true);
+    }
+
+    function handleUpdateProduct() {
+        if (!priceRef.current || !nameRef.current || !quantityRef.current) return;
+        updateProductFetch(
+            {
+                name: nameRef.current.value || product.name,
+                price: +priceRef.current.value || product.price,
+                quantity: +quantityRef.current.value,
+            },
+            data => {
+                onUpdateProduct(data);
+                setIsUpdateProduct(false);
+            }
+        );
+    }
+
     return (
-        <div className="product">
-            <div className="product__name">{product.name}</div>
+        <div className="product" onDoubleClick={handleDoubleClick}>
+            <div className="product__name">
+                {isUpdateProduct ? (
+                    <input type="text" ref={nameRef} defaultValue={product.name} />
+                ) : (
+                    product.name
+                )}
+            </div>
             <div className="product__details">
                 <input
                     ref={priceRef}
@@ -46,8 +74,19 @@ export default function Product({ product, onDeleteProduct, onUpdateProduct }: P
                     placeholder="Enter a price"
                     defaultValue={product.price === 0 || !product.price ? "" : product.price}
                 />
-                <div className="product__quantity">{product.quantity}</div>
-                <button onClick={handleDeleteProduct}>X</button>
+
+                <div className="product__quantity">
+                    {isUpdateProduct ? (
+                        <input type="number" ref={quantityRef} defaultValue={product.quantity} />
+                    ) : (
+                        product.quantity
+                    )}
+                </div>
+                {isUpdateProduct ? (
+                    <button onClick={handleUpdateProduct}>V</button>
+                ) : (
+                    <button onClick={handleDeleteProduct}>X</button>
+                )}
             </div>
         </div>
     );
