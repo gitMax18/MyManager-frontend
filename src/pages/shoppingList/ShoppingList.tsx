@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { ShoppingListApi, ProductData, ProductApi } from "../../types/shopping";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Product from "../../components/shoppingList/product/Product";
@@ -13,6 +13,7 @@ type Props = {
     onDeleteProduct: (productId: number, shoppingListId: number) => void;
     onDeleteShoppingList: (shoppingListId: number) => void;
     onUpdateProduct: (product: ProductApi) => void;
+    onUpdateShoppingList: (shoppingList: ShoppingListApi) => void;
 };
 
 function ShoppingList({
@@ -21,29 +22,35 @@ function ShoppingList({
     onDeleteProduct,
     onDeleteShoppingList,
     onUpdateProduct,
+    onUpdateShoppingList,
 }: Props) {
+    const [isUpdateName, setIsUpdateName] = useState(false);
+    const updateNameRef = useRef<HTMLInputElement>(null);
+
     const { id } = useParams();
     if (!id) {
         return <Navigate to="/shoppingLists" replace={true} />;
     }
     const navigate = useNavigate();
+    // used for create new product
     const { fetchApi, validationError } = useFetch<ProductApi>("/product/" + id, "POST");
-
-    const { fetchApi: deleteListFetch, validationError: deleteListValidationError } =
+    // used to delete shopping list
+    const { fetchApi: fetchDeleteList, validationError: deleteListValidationError } =
         useFetch<ShoppingListApi>("/shoppingList/" + id, "DELETE");
-
+    // used for update shoppingList
+    const { fetchApi: fetchUpdateShoppingList } = useFetch<ShoppingListApi>(
+        "/shoppingList/" + id,
+        "PUT"
+    );
     const shoppingList = shoppingLists?.find(list => list.id === +id);
 
-    const total = useMemo(() => {
-        let total = 0;
-        if (!shoppingList) return total;
-        if (!shoppingList.products) return total;
-        shoppingList.products.forEach(product => {
-            if (product.price) {
-                total += product.price;
-            }
-        });
-        return total;
+    // get the total of all products price
+    const total: number = useMemo(() => {
+        if (!shoppingList) return 0;
+        return shoppingList.products.reduce(
+            (acc, curr) => (acc += curr.price === undefined ? 0 : curr.price),
+            0
+        );
     }, [shoppingList?.products]);
 
     if (!shoppingList) {
@@ -54,13 +61,6 @@ function ShoppingList({
         );
     }
 
-    // const total: number = useMemo(() => {
-    //     return shoppingList.products.reduce(
-    //         (acc, curr) => (acc += curr.price === undefined ? 0 : curr.price),
-    //         0
-    //     );
-    // }, [shoppingList.products]);
-
     function addProduct(product: ProductData) {
         fetchApi(product, product => {
             onAddProduct(product);
@@ -68,15 +68,46 @@ function ShoppingList({
     }
 
     function handleDeleteShoppingList() {
-        deleteListFetch(null, data => {
+        fetchDeleteList(null, data => {
             onDeleteShoppingList(data.id);
             navigate("/shoppingLists");
         });
     }
 
+    function handleDoubleClickName() {
+        setIsUpdateName(true);
+        setTimeout(() => {
+            updateNameRef.current?.focus();
+        }, 0);
+    }
+
+    function handleBlurUpdateName() {
+        if (!updateNameRef.current || updateNameRef.current.value === "") return;
+        fetchUpdateShoppingList(
+            {
+                name: updateNameRef.current.value,
+            },
+            data => {
+                onUpdateShoppingList(data);
+            }
+        );
+        setIsUpdateName(false);
+    }
+
     return (
         <MainLayout>
-            <h1>{shoppingList.name}</h1>
+            <h1 onDoubleClick={handleDoubleClickName}>
+                {isUpdateName ? (
+                    <input
+                        ref={updateNameRef}
+                        onBlur={handleBlurUpdateName}
+                        type="text"
+                        defaultValue={shoppingList.name}
+                    />
+                ) : (
+                    shoppingList.name
+                )}
+            </h1>
             <button onClick={handleDeleteShoppingList}>delete shopping list</button>
             <ShoppingListProductForm onAddProduct={addProduct} validationError={validationError} />
             <div>

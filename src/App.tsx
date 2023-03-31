@@ -29,6 +29,14 @@ function App() {
         });
     }
 
+    function updateShoppingList(shoppingList: ShoppingListApi) {
+        setShoppingLists(prev => {
+            if (prev === null) return [shoppingList];
+            const newShoppingLists = prev.filter(list => list.id !== shoppingList.id);
+            return [...newShoppingLists, shoppingList];
+        });
+    }
+
     function addProductToShoppingList(product: ProductApi) {
         setShoppingLists(prev => {
             if (!prev) return null;
@@ -85,6 +93,7 @@ function App() {
                     onAddProduct={addProductToShoppingList}
                     onDeleteProduct={deleteProductToShoppingList}
                     onUpdateProduct={updateProductToShoppingList}
+                    onUpdateShoppingList={updateShoppingList}
                     shoppingLists={shoppingLists}
                 />
             ),
