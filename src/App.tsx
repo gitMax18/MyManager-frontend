@@ -5,6 +5,7 @@ import AddShoppingList from "./pages/addShoppingList/AddShoppingList";
 import { ShoppingListApi, ProductApi } from "./types/shopping";
 import ShoppingList from "./pages/shoppingList/ShoppingList";
 import useFetch from "./hooks/useFetch";
+import Navbar from "./components/navbar/Navbar";
 
 function App() {
     const { data: shoppingLists, setData: setShoppingLists } =
@@ -104,7 +105,11 @@ function App() {
         },
     ]);
 
-    return <RouterProvider router={router} />;
+    return (
+        <>
+            <RouterProvider router={router} />
+        </>
+    );
 }
 
 export default App;

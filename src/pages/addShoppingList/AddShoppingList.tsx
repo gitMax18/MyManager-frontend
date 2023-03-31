@@ -1,7 +1,6 @@
-import React from "react";
-import MainLayout from "../../layouts/mainLayout/MainLayout";
 import ShoppingListForm from "../../components/shoppingList/shoppingListForm/ShoppingListForm";
-import { ShoppingListData, ShoppingListApi } from "../../types/shopping";
+import { ShoppingListApi } from "../../types/shopping";
+import PageLayout from "../../layouts/pageLayout/PageLayout";
 
 type Props = {
     onAddShoppingList: (shoppingList: ShoppingListApi) => void;
@@ -9,9 +8,9 @@ type Props = {
 
 export default function AddShoppingList({ onAddShoppingList }: Props) {
     return (
-        <MainLayout>
+        <PageLayout>
             <h1>Add new shopping list</h1>
             <ShoppingListForm onAddShoppingList={onAddShoppingList} />
-        </MainLayout>
+        </PageLayout>
     );
 }

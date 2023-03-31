@@ -1,11 +1,11 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ShoppingListApi, ProductData, ProductApi } from "../../types/shopping";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Product from "../../components/shoppingList/product/Product";
-import MainLayout from "../../layouts/mainLayout/MainLayout";
 import ShoppingListProductForm from "../../components/shoppingList/shoppingListProductForm/ShoppingListProductForm";
 import useFetch from "../../hooks/useFetch";
 import { useMemo } from "react";
+import PageLayout from "../../layouts/pageLayout/PageLayout";
 
 type Props = {
     shoppingLists: ShoppingListApi[] | null;
@@ -95,7 +95,7 @@ function ShoppingList({
     }
 
     return (
-        <MainLayout>
+        <PageLayout>
             <h1 onDoubleClick={handleDoubleClickName}>
                 {isUpdateName ? (
                     <input
@@ -121,7 +121,7 @@ function ShoppingList({
                 ))}
             </div>
             <div>Total : {total}</div>
-        </MainLayout>
+        </PageLayout>
     );
 }
 

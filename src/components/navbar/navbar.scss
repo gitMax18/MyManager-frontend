@@ -1,0 +1,25 @@
+.navbar {
+    background-color: lavender;
+    &__container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    &__logo {
+        font-size: 2.5rem;
+        &--link {
+            text-decoration: none;
+        }
+    }
+    &__nav {
+    }
+    &__list {
+        display: flex;
+        list-style: none;
+    }
+    &__item {
+    }
+    &__link {
+        text-decoration: none;
+    }
+}
