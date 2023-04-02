@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
 import { v4 as uuidv4 } from "uuid";
 import ShoppingListProductForm from "../shoppingListProductForm/ShoppingListProductForm";
+import FormField from "../../form/FormField";
+import DisplayProduct from "../productData/DisplayProduct";
+
 type Props = {
     onAddShoppingList: (shoppingList: ShoppingListApi) => void;
 };
@@ -35,6 +38,7 @@ function ShoppingListForm({ onAddShoppingList }: Props) {
             return;
         }
         setIsFormError(false);
+        console.log("ref", nameRef.current?.value);
         const newShoppingList: ShoppingListData = {
             name: nameRef.current!.value,
             products: products,
@@ -58,7 +62,7 @@ function ShoppingListForm({ onAddShoppingList }: Props) {
             {requestError && <p>{requestError}</p>}
             {isFormError && <p>Veuillez ajouter un nom </p>}
             {validationError?.details?.name && <p>{validationError.details.name}</p>}
-            <div className="shoppingListForm__fields">
+            {/* <div className="shoppingListForm__fields">
                 <label className="shoppingListForm__label" htmlFor="name">
                     Name
                 </label>
@@ -69,20 +73,24 @@ function ShoppingListForm({ onAddShoppingList }: Props) {
                     id="name"
                     name="name"
                 />
-            </div>
-            <h2>add new +</h2>
+            </div> */}
+            <FormField type="text" label="name" id="name" ref={nameRef} />
+            <h2 className="shoppingListForm__subtitle">ADD PRODUCT</h2>
             <ShoppingListProductForm onAddProduct={addProduct} validationError={validationError} />
+            {products.length === 0 && (
+                <p className="shoppingListForm__emptyMsg">No product added to the list...</p>
+            )}
             {products.map((product, index) => {
                 return (
                     <div key={uuidv4()}>
-                        <div>
-                            {product.name} / {product.quantity}
-                        </div>
-                        <button onClick={() => handleDeleteProduct(index)}>X</button>
+                        <DisplayProduct
+                            product={product}
+                            onClick={() => handleDeleteProduct(index)}
+                        />
                     </div>
                 );
             })}
-            <button>Valider</button>
+            <button className="shoppingListForm__btn">Valider</button>
         </form>
     );
 }

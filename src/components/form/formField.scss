@@ -1,0 +1,20 @@
+.formField {
+    margin-bottom: 2rem;
+    &__label {
+        display: inline-block;
+        color: $color-light;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        padding-left: 0.4rem;
+    }
+    &__input {
+        display: block;
+        padding: 0.8rem;
+        border-radius: $main-radius;
+        border: none;
+        font-size: 2rem;
+        outline: $color-primary solid 2px;
+        width: 100%;
+    }
+}

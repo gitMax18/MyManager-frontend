@@ -1,5 +1,5 @@
 .navbar {
-    background-color: lavender;
+    border-bottom: 1px solid $color-light;
     &__container {
         display: flex;
         align-items: center;
@@ -9,6 +9,7 @@
         font-size: 2.5rem;
         &--link {
             text-decoration: none;
+            color: $color-light;
         }
     }
     &__nav {
@@ -21,5 +22,6 @@
     }
     &__link {
         text-decoration: none;
+        color: $color-light;
     }
 }

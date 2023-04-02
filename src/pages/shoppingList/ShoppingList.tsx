@@ -6,6 +6,7 @@ import ShoppingListProductForm from "../../components/shoppingList/shoppingListP
 import useFetch from "../../hooks/useFetch";
 import { useMemo } from "react";
 import PageLayout from "../../layouts/pageLayout/PageLayout";
+import "./shoppingList.scss";
 
 type Props = {
     shoppingLists: ShoppingListApi[] | null;
@@ -25,6 +26,8 @@ function ShoppingList({
     onUpdateShoppingList,
 }: Props) {
     const [isUpdateName, setIsUpdateName] = useState(false);
+    const [isShowAdd, setIsShowAdd] = useState(false);
+
     const updateNameRef = useRef<HTMLInputElement>(null);
 
     const { id } = useParams();
@@ -74,6 +77,10 @@ function ShoppingList({
         });
     }
 
+    function handleToggleAdd() {
+        setIsShowAdd(prev => !prev);
+    }
+
     function handleDoubleClickName() {
         setIsUpdateName(true);
         setTimeout(() => {
@@ -96,31 +103,54 @@ function ShoppingList({
 
     return (
         <PageLayout>
-            <h1 onDoubleClick={handleDoubleClickName}>
-                {isUpdateName ? (
-                    <input
-                        ref={updateNameRef}
-                        onBlur={handleBlurUpdateName}
-                        type="text"
-                        defaultValue={shoppingList.name}
+            <div className="shoppingList">
+                <div className="shoppingList__header">
+                    <h1 className="shoppingList__title" onDoubleClick={handleDoubleClickName}>
+                        {isUpdateName ? (
+                            <input
+                                ref={updateNameRef}
+                                onBlur={handleBlurUpdateName}
+                                type="text"
+                                defaultValue={shoppingList.name}
+                            />
+                        ) : (
+                            shoppingList.name
+                        )}
+                    </h1>
+                    <div className="shoppingList__btns">
+                        <button
+                            className="shoppingList__btn shoppingList__btn--add"
+                            onClick={handleToggleAdd}
+                        >
+                            {isShowAdd ? "Hide add product" : "Add product"}
+                        </button>
+                        <button
+                            className="shoppingList__btn shoppingList__btn--delete"
+                            onClick={handleDeleteShoppingList}
+                        >
+                            delete shopping list
+                        </button>
+                    </div>
+                </div>
+                {isShowAdd && (
+                    <ShoppingListProductForm
+                        onAddProduct={addProduct}
+                        validationError={validationError}
                     />
-                ) : (
-                    shoppingList.name
                 )}
-            </h1>
-            <button onClick={handleDeleteShoppingList}>delete shopping list</button>
-            <ShoppingListProductForm onAddProduct={addProduct} validationError={validationError} />
-            <div>
-                {shoppingList.products.map(product => (
-                    <Product
-                        key={product.id}
-                        product={product}
-                        onDeleteProduct={onDeleteProduct}
-                        onUpdateProduct={onUpdateProduct}
-                    />
-                ))}
+
+                <div>
+                    {shoppingList.products.map(product => (
+                        <Product
+                            key={product.id}
+                            product={product}
+                            onDeleteProduct={onDeleteProduct}
+                            onUpdateProduct={onUpdateProduct}
+                        />
+                    ))}
+                </div>
+                <div className="shoppingList__total">Total : {total}</div>
             </div>
-            <div>Total : {total}</div>
         </PageLayout>
     );
 }

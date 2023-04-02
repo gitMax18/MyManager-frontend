@@ -2,9 +2,48 @@
     padding: 0.5rem 1.5rem;
     display: flex;
     justify-content: space-between;
-    background-color: lightblue;
-    border-radius: 10000rem;
-    &__details {
+    background-color: $color-secondary;
+    border-radius: $main-radius;
+    margin-bottom: 1rem;
+
+    &__infos {
         display: flex;
+        align-items: center;
+        font-size: 2rem;
+        width: 75%;
+    }
+    &__input {
+        margin-left: 0.5rem;
+        outline: none;
+        background-color: $color-light;
+        border: none;
+        &--quantity {
+            width: 10%;
+            min-width: 5rem;
+        }
+        &--name {
+            width: 100%;
+            min-width: 20rem;
+        }
+    }
+    &__quantity {
+        margin-right: 0.5rem;
+    }
+    &__right {
+        display: flex;
+        font-size: 2rem;
+    }
+    &__btn {
+        margin-left: 0.5rem;
+        border: none;
+        cursor: pointer;
+        color: $color-light;
+
+        &--delete {
+            background-color: red;
+        }
+        &--update {
+            background-color: green;
+        }
     }
 }

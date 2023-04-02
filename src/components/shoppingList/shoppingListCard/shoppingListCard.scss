@@ -1,4 +1,8 @@
 .shoppingListCard {
-    padding: 1rem;
+    padding: 1.5rem;
     border: 1px solid black;
+    width: 20.5%;
+    min-width: 25rem;
+    background-color: $color-secondary;
+    border-radius: $main-radius;
 }

@@ -1,5 +1,11 @@
 .featureCard {
-    border: 1px solid black;
-    padding: $main-padding;
+    padding: 1.5rem;
     max-width: 40%;
+    background-color: $color-secondary;
+    border-radius: $main-radius;
+
+    &__name {
+        font-size: 2rem;
+        text-align: center;
+    }
 }

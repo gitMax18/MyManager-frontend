@@ -59,15 +59,32 @@ export default function Product({ product, onDeleteProduct, onUpdateProduct }: P
 
     return (
         <div className="product" onDoubleClick={handleDoubleClick}>
-            <div className="product__name">
+            <div className="product__infos">
                 {isUpdateProduct ? (
-                    <input type="text" ref={nameRef} defaultValue={product.name} />
+                    <input
+                        className="product__input product__input--quantity"
+                        type="number"
+                        ref={quantityRef}
+                        defaultValue={product.quantity}
+                    />
+                ) : (
+                    product.quantity + " | "
+                )}
+
+                {isUpdateProduct ? (
+                    <input
+                        className="product__input product__input--name"
+                        type="text"
+                        ref={nameRef}
+                        defaultValue={product.name}
+                    />
                 ) : (
                     product.name
                 )}
             </div>
-            <div className="product__details">
+            <div className="product__right">
                 <input
+                    className="product__input product__input--price"
                     ref={priceRef}
                     onBlur={handlePrice}
                     type="number"
@@ -75,17 +92,20 @@ export default function Product({ product, onDeleteProduct, onUpdateProduct }: P
                     defaultValue={product.price === 0 || !product.price ? "" : product.price}
                 />
 
-                <div className="product__quantity">
-                    {isUpdateProduct ? (
-                        <input type="number" ref={quantityRef} defaultValue={product.quantity} />
-                    ) : (
-                        product.quantity
-                    )}
-                </div>
                 {isUpdateProduct ? (
-                    <button onClick={handleUpdateProduct}>V</button>
+                    <button
+                        className="product__btn product__btn--update"
+                        onClick={handleUpdateProduct}
+                    >
+                        V
+                    </button>
                 ) : (
-                    <button onClick={handleDeleteProduct}>X</button>
+                    <button
+                        className="product__btn product__btn--delete"
+                        onClick={handleDeleteProduct}
+                    >
+                        X
+                    </button>
                 )}
             </div>
         </div>

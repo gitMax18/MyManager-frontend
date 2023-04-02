@@ -1,0 +1,13 @@
+.displayProduct {
+    background-color: $color-secondary;
+    border-radius: $main-radius;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    align-items: center;
+    &__infos {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+}

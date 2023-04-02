@@ -15,9 +15,9 @@ function ShoppingListCard({ shoppingList }: Props) {
             onClick={() => navigate("/shoppingLists/" + shoppingList.id)}
         >
             <h3 className="shoppingListCard__name">{shoppingList.name}</h3>
-            {/* <p className="shoppingListCard__count">
-                Nombre de produits : <strong>{shoppingList.shoppingRows.length}</strong>
-            </p> */}
+            <p className="shoppingListCard__count">
+                Nombre de produits : <strong>{shoppingList.products.length}</strong>
+            </p>
             <p>
                 Créer le <strong>{formatDate(shoppingList.createdAt)}</strong>
             </p>

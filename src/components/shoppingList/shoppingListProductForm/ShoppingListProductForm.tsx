@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { ProductData } from "../../../types/shopping";
-
+import FormField from "../../form/FormField";
+import "./shoppingListProductForm.scss";
 type Props = {
     onAddProduct: (product: ProductData) => void;
     validationError: any;
@@ -35,38 +36,25 @@ function ShoppingListProductForm({ onAddProduct, validationError }: Props) {
     }
 
     return (
-        <div>
+        <div className="shoppingListProductForm">
             {isProductError && <p>Veuillez entrer des valeurs</p>}
             {validationError?.details?.products && <p>{validationError.details.products}</p>}
-            <div className="shoppingListForm__addProduct">
-                <div className="shoppingListForm__fields">
-                    <label className="shoppingListForm__label" htmlFor="product">
-                        Product
-                    </label>
-                    <input
-                        className="shoppingListForm__input"
-                        type="text"
-                        id="product"
-                        name="name"
-                        ref={productRef}
-                    />
-                </div>
-                <div className="shoppingListForm__fields">
-                    <label className="shoppingListForm__label" htmlFor="product">
-                        Quantity
-                    </label>
-                    <input
-                        className="shoppingListForm__input"
-                        type="number"
-                        id="quantity"
-                        name="quantity"
-                        ref={quantityRef}
-                        defaultValue={1}
-                    />
-                </div>
+            <div className="shoppingListProductForm__fields">
+                <FormField id="name" ref={productRef} label="Product" type="text" />
+                <FormField
+                    id="quantity"
+                    ref={quantityRef}
+                    label="Quantity"
+                    type="number"
+                    defaultValue={1}
+                />
             </div>
 
-            <button onClick={handeAddProduct} type="button">
+            <button
+                className="shoppingListProductForm__btn"
+                onClick={handeAddProduct}
+                type="button"
+            >
                 add
             </button>
         </div>

@@ -1,0 +1,33 @@
+.shoppingList {
+    &__title {
+        color: $color-primary;
+    }
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &__btns {
+        display: flex;
+        gap: 1rem;
+    }
+    &__btn {
+        height: min-content;
+        padding: 1rem;
+        border: none;
+        border-radius: $main-radius;
+        font-size: 2rem;
+        color: $color-light;
+        font-weight: bold;
+        &--add {
+            background-color: green;
+        }
+        &--delete {
+            background-color: red;
+        }
+    }
+    &__total {
+        font-size: 2.5rem;
+        color: $color-light;
+    }
+}

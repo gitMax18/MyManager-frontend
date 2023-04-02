@@ -1,0 +1,29 @@
+.shoppingLists {
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &__title {
+        color: $color-primary;
+    }
+    &__btn {
+        border-radius: $main-radius;
+        height: fit-content;
+        width: 30rem;
+        padding: 1rem;
+        background-color: $color-primary;
+        border: none;
+        color: $color-dark;
+        font-size: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    &__lists {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 1.5rem;
+        align-content: center;
+    }
+}
