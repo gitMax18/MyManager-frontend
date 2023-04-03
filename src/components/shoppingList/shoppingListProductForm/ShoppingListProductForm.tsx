@@ -1,17 +1,28 @@
 import React, { useRef, useState } from "react";
-import { ProductData } from "../../../types/shopping";
-import FormField from "../../form/FormField";
+import { Category, ProductData } from "../../../types/shopping";
+import FormField from "../../form/formField/FormField";
 import "./shoppingListProductForm.scss";
+import FormSelectField from "../../form/formSelectField/formSelectField";
 type Props = {
     onAddProduct: (product: ProductData) => void;
     validationError: any;
 };
+
+function formatCategoryEnum(): { value: Category; name: string }[] {
+    const enumCategory: { value: Category; name: string }[] = [];
+    Object.entries(Category).forEach(c => {
+        const formatedCategory = { value: c[1], name: c[0] };
+        enumCategory.push(formatedCategory);
+    });
+    return enumCategory;
+}
 
 function ShoppingListProductForm({ onAddProduct, validationError }: Props) {
     const [isProductError, setIsProductError] = useState<boolean>(false);
 
     const productRef = useRef<HTMLInputElement>(null);
     const quantityRef = useRef<HTMLInputElement>(null);
+    const categoryRef = useRef<HTMLSelectElement>(null);
 
     function handeAddProduct() {
         if (productRef.current?.value === "" || quantityRef.current?.value === "") {
@@ -20,8 +31,9 @@ function ShoppingListProductForm({ onAddProduct, validationError }: Props) {
         }
         setIsProductError(false);
         const newProduct: ProductData = {
-            name: productRef.current!.value as string,
-            quantity: +quantityRef.current!.value as number,
+            name: productRef.current!.value,
+            quantity: +quantityRef.current!.value,
+            category: categoryRef.current!.value,
         };
 
         onAddProduct(newProduct);
@@ -32,6 +44,7 @@ function ShoppingListProductForm({ onAddProduct, validationError }: Props) {
         if (productRef.current && quantityRef.current) {
             productRef.current.value = "";
             quantityRef.current.value = "1";
+            categoryRef.current!.value = Category.Unknow;
         }
     }
 
@@ -47,6 +60,13 @@ function ShoppingListProductForm({ onAddProduct, validationError }: Props) {
                     label="Quantity"
                     type="number"
                     defaultValue={1}
+                />
+                <FormSelectField
+                    name="category"
+                    id="category"
+                    label="Category"
+                    options={formatCategoryEnum()}
+                    ref={categoryRef}
                 />
             </div>
 

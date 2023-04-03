@@ -6,7 +6,9 @@ export type ShoppingListData = {
 export type ProductData = {
     name: string;
     quantity: number;
+    category?: string;
 };
+
 export type ShoppingListPostResponse = {
     data: ShoppingListApi;
     message: string;
@@ -33,4 +35,15 @@ export type ProductApi = {
     updatedAt: string;
     name: string;
     price?: number;
+    category: string;
 };
+
+export enum Category {
+    Unknow = "UNKNOW",
+    Dry = "DRY",
+    Fresh = "FRESH",
+    Household = "HOUSEHOLD",
+    Frozen = "FROZEN",
+    Beverage = "BEVERAGE",
+    Hygienic = "HYGIENIC",
+}

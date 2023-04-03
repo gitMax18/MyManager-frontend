@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { ShoppingListApi, ProductData, ProductApi } from "../../types/shopping";
+import { ShoppingListApi, ProductData, ProductApi, Category } from "../../types/shopping";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Product from "../../components/shoppingList/product/Product";
 import ShoppingListProductForm from "../../components/shoppingList/shoppingListProductForm/ShoppingListProductForm";
@@ -7,6 +7,7 @@ import useFetch from "../../hooks/useFetch";
 import { useMemo } from "react";
 import PageLayout from "../../layouts/pageLayout/PageLayout";
 import "./shoppingList.scss";
+import SortProductsByCategory from "../../components/shoppingList/sortProductsByCategory/SortProductsByCategory";
 
 type Props = {
     shoppingLists: ShoppingListApi[] | null;
@@ -140,14 +141,19 @@ function ShoppingList({
                 )}
 
                 <div>
-                    {shoppingList.products.map(product => (
+                    {/* {shoppingList.products.map(product => (
                         <Product
                             key={product.id}
                             product={product}
                             onDeleteProduct={onDeleteProduct}
                             onUpdateProduct={onUpdateProduct}
                         />
-                    ))}
+                    ))} */}
+                    <SortProductsByCategory
+                        products={shoppingList.products}
+                        onDeleteProduct={onDeleteProduct}
+                        onUpdateProduct={onUpdateProduct}
+                    />
                 </div>
                 <div className="shoppingList__total">Total : {total}</div>
             </div>

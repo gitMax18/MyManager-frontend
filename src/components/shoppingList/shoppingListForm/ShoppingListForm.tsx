@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
 import { v4 as uuidv4 } from "uuid";
 import ShoppingListProductForm from "../shoppingListProductForm/ShoppingListProductForm";
-import FormField from "../../form/FormField";
+import FormField from "../../form/formField/FormField";
 import DisplayProduct from "../productData/DisplayProduct";
 
 type Props = {
@@ -62,18 +62,7 @@ function ShoppingListForm({ onAddShoppingList }: Props) {
             {requestError && <p>{requestError}</p>}
             {isFormError && <p>Veuillez ajouter un nom </p>}
             {validationError?.details?.name && <p>{validationError.details.name}</p>}
-            {/* <div className="shoppingListForm__fields">
-                <label className="shoppingListForm__label" htmlFor="name">
-                    Name
-                </label>
-                <input
-                    ref={nameRef}
-                    className="shoppingListForm__input"
-                    type="text"
-                    id="name"
-                    name="name"
-                />
-            </div> */}
+
             <FormField type="text" label="name" id="name" ref={nameRef} />
             <h2 className="shoppingListForm__subtitle">ADD PRODUCT</h2>
             <ShoppingListProductForm onAddProduct={addProduct} validationError={validationError} />

@@ -1,7 +1,7 @@
 .shoppingListProductForm {
     &__fields {
         display: grid;
-        grid-template-columns: 5fr 1fr;
+        grid-template-columns: 5fr 1fr 1fr;
         gap: 1rem;
     }
     &__btn {
