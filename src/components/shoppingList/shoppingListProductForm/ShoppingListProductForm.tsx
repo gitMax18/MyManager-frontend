@@ -2,7 +2,8 @@ import React, { useRef, useState } from "react";
 import { Category, ProductData } from "../../../types/shopping";
 import FormField from "../../form/formField/FormField";
 import "./shoppingListProductForm.scss";
-import FormSelectField from "../../form/formSelectField/formSelectField";
+import FormSelectField from "../../form/formSelectField/FormSelectField";
+
 type Props = {
     onAddProduct: (product: ProductData) => void;
     validationError: any;

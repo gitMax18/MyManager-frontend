@@ -2,10 +2,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Homepage from "./pages/homepage/Homepage";
 import ShoppingLists from "./pages/shoppingLists/ShoppingLists";
 import AddShoppingList from "./pages/addShoppingList/AddShoppingList";
-import { ShoppingListApi, ProductApi } from "./types/shopping";
+import { ShoppingListApi, ProductApi, Category } from "./types/shopping";
 import ShoppingList from "./pages/shoppingList/ShoppingList";
 import useFetch from "./hooks/useFetch";
-import Navbar from "./components/navbar/Navbar";
+import { DragDropContext, DraggableLocation, DragUpdate } from "react-beautiful-dnd";
 
 function App() {
     const { data: shoppingLists, setData: setShoppingLists } =
@@ -77,6 +77,40 @@ function App() {
         });
     }
 
+    function updateDataFromDragAndDrop(
+        destination: DraggableLocation,
+        source: DraggableLocation,
+        draggableId: string,
+        listId: number
+    ) {
+        if (!shoppingLists) return;
+        const shoppingListToUpdate = shoppingLists?.find(list => list.id === listId);
+        if (!shoppingListToUpdate) return;
+        const shoppingListIndex = shoppingLists?.indexOf(shoppingListToUpdate);
+        const productToUpdate = shoppingListToUpdate?.products.find(
+            product => product.id === +draggableId
+        );
+        // get the index of product in the
+        const productToReplace = shoppingListToUpdate?.products.filter(
+            product => product.category === destination.droppableId
+        )[destination.index];
+        const indexToReplace = shoppingListToUpdate.products.indexOf(productToReplace);
+        if (!productToUpdate || shoppingListIndex === -1) return;
+
+        productToUpdate.category = destination.droppableId;
+        const productIndex = shoppingListToUpdate?.products.indexOf(productToUpdate);
+        shoppingListToUpdate.products.splice(productIndex, 1);
+        shoppingListToUpdate.products.splice(indexToReplace, 0, {
+            ...productToUpdate,
+        });
+        if (productIndex === -1) return;
+        shoppingLists.splice(shoppingListIndex, 1, { ...shoppingListToUpdate });
+
+        setShoppingLists(prev => {
+            return [...shoppingLists];
+        });
+    }
+
     const router = createBrowserRouter([
         {
             path: "/",
@@ -105,9 +139,18 @@ function App() {
         },
     ]);
 
+    function handleAddEnd({ destination, draggableId, source, type }: DragUpdate) {
+        if (!destination) return;
+        if (source.droppableId === destination.droppableId && source.index === destination.index)
+            return;
+        updateDataFromDragAndDrop(destination, source, draggableId, +type);
+    }
+
     return (
         <>
-            <RouterProvider router={router} />
+            <DragDropContext onDragEnd={handleAddEnd}>
+                <RouterProvider router={router} />
+            </DragDropContext>
         </>
     );
 }
