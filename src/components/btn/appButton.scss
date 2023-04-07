@@ -1,0 +1,12 @@
+.appButton {
+    display: block;
+    padding: 1rem;
+    font-size: 1.8rem;
+    background-color: $color-primary;
+    border: none;
+    border-radius: $main-radius;
+    margin: 0 auto;
+    width: 30%;
+    font-weight: bold;
+    cursor: pointer;
+}

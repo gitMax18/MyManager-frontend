@@ -6,10 +6,16 @@ import { ShoppingListApi, ProductApi, Category } from "./types/shopping";
 import ShoppingList from "./pages/shoppingList/ShoppingList";
 import useFetch from "./hooks/useFetch";
 import { DragDropContext, DraggableLocation, DragUpdate } from "react-beautiful-dnd";
+import useUpdateFetch from "./hooks/useupdateFetch";
+import LoginPage from "./pages/loginPage/LoginPage";
+import RegisterPage from "./pages/registerPage/RegisterPage";
+import AuthContextProvider from "./contexts/authContext";
 
 function App() {
     const { data: shoppingLists, setData: setShoppingLists } =
         useFetch<ShoppingListApi[]>("/shoppingList");
+
+    const { fetchUpdateApi } = useUpdateFetch();
 
     function addShoppingList(shoppingList: ShoppingListApi) {
         setShoppingLists(prev => {
@@ -90,7 +96,7 @@ function App() {
         const productToUpdate = shoppingListToUpdate?.products.find(
             product => product.id === +draggableId
         );
-        // get the index of product in the
+        // get the index of product
         const productToReplace = shoppingListToUpdate?.products.filter(
             product => product.category === destination.droppableId
         )[destination.index];
@@ -105,7 +111,14 @@ function App() {
         });
         if (productIndex === -1) return;
         shoppingLists.splice(shoppingListIndex, 1, { ...shoppingListToUpdate });
-
+        fetchUpdateApi<ShoppingListApi>(
+            "/product/" + productToUpdate.id,
+            "PUT",
+            productToUpdate,
+            data => {
+                console.log("data", data);
+            }
+        );
         setShoppingLists(prev => {
             return [...shoppingLists];
         });
@@ -137,9 +150,17 @@ function App() {
             path: "/shoppingLists/add",
             element: <AddShoppingList onAddShoppingList={addShoppingList} />,
         },
+        {
+            path: "/auth/login",
+            element: <LoginPage />,
+        },
+        {
+            path: "/auth/register",
+            element: <RegisterPage />,
+        },
     ]);
 
-    function handleAddEnd({ destination, draggableId, source, type }: DragUpdate) {
+    function handleDragEnd({ destination, draggableId, source, type }: DragUpdate) {
         if (!destination) return;
         if (source.droppableId === destination.droppableId && source.index === destination.index)
             return;
@@ -148,8 +169,10 @@ function App() {
 
     return (
         <>
-            <DragDropContext onDragEnd={handleAddEnd}>
-                <RouterProvider router={router} />
+            <DragDropContext onDragEnd={handleDragEnd}>
+                <AuthContextProvider>
+                    <RouterProvider router={router} />
+                </AuthContextProvider>
             </DragDropContext>
         </>
     );

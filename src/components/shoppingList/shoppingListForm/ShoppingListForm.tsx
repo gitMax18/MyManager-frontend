@@ -25,6 +25,11 @@ function ShoppingListForm({ onAddShoppingList }: Props) {
         "POST"
     );
 
+    useEffect(() => {
+        console.log(validationError);
+        console.log(requestError);
+    }, [requestError, validationError]);
+
     function addProduct(newProduct: ProductData) {
         setProducts(prev => {
             return [...prev, newProduct];
@@ -44,7 +49,7 @@ function ShoppingListForm({ onAddShoppingList }: Props) {
             products: products,
         };
 
-        await fetchApi(newShoppingList, data => {
+        await fetchApi(newShoppingList as Partial<ShoppingListApi>, data => {
             onAddShoppingList(data);
             navigate("/shoppingLists");
         });

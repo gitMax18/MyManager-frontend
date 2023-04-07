@@ -2,10 +2,13 @@ import React from "react";
 import MainLayout from "../../layouts/mainLayout/MainLayout";
 import { NavLink } from "react-router-dom";
 import "./navbar.scss";
+import { useAuth } from "../../contexts/authContext";
 
 type Props = {};
 
 export default function Navbar({}: Props) {
+    const { logout, user } = useAuth();
+
     return (
         <div className="navbar">
             <MainLayout>
@@ -22,6 +25,24 @@ export default function Navbar({}: Props) {
                                     Shopping lists
                                 </NavLink>
                             </li>
+                            {!user ? (
+                                <>
+                                    <li className="navbar__item">
+                                        <NavLink className="navbar__link" to="/auth/login">
+                                            Login
+                                        </NavLink>
+                                    </li>
+                                    <li className="navbar__item">
+                                        <NavLink className="navbar__link" to="/auth/register">
+                                            Register
+                                        </NavLink>
+                                    </li>
+                                </>
+                            ) : (
+                                <li className="navbar__item" onClick={() => logout()}>
+                                    <div className="navbar__link">Logout</div>
+                                </li>
+                            )}
                         </ul>
                     </nav>
                 </div>
