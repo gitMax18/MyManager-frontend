@@ -20,11 +20,6 @@ export default function Navbar({}: Props) {
                     </div>
                     <nav className="navbar__nav">
                         <ul className="navbar__list">
-                            <li className="navbar__item">
-                                <NavLink className="navbar__link" to="/shoppingLists">
-                                    Shopping lists
-                                </NavLink>
-                            </li>
                             {!user ? (
                                 <>
                                     <li className="navbar__item">
@@ -39,9 +34,16 @@ export default function Navbar({}: Props) {
                                     </li>
                                 </>
                             ) : (
-                                <li className="navbar__item" onClick={() => logout()}>
-                                    <div className="navbar__link">Logout</div>
-                                </li>
+                                <>
+                                    <li className="navbar__item">
+                                        <NavLink className="navbar__link" to="/shoppingLists">
+                                            Shopping lists
+                                        </NavLink>
+                                    </li>
+                                    <li className="navbar__item" onClick={() => logout()}>
+                                        <div className="navbar__link">Logout</div>
+                                    </li>
+                                </>
                             )}
                         </ul>
                     </nav>

@@ -10,6 +10,7 @@ import useUpdateFetch from "./hooks/useUpdateFetch";
 import LoginPage from "./pages/loginPage/LoginPage";
 import RegisterPage from "./pages/registerPage/RegisterPage";
 import AuthContextProvider from "./contexts/authContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
     const { data: shoppingLists, setData: setShoppingLists } =
@@ -127,28 +128,42 @@ function App() {
     const router = createBrowserRouter([
         {
             path: "/",
-            element: <Homepage />,
+            element: (
+                <ProtectedRoute>
+                    <Homepage />
+                </ProtectedRoute>
+            ),
         },
         {
             path: "/shoppingLists",
-            element: <ShoppingLists shoppingLists={shoppingLists} />,
+            element: (
+                <ProtectedRoute>
+                    <ShoppingLists shoppingLists={shoppingLists} />
+                </ProtectedRoute>
+            ),
         },
         {
             path: "/shoppingLists/:id",
             element: (
-                <ShoppingList
-                    onDeleteShoppingList={deleteShoppingList}
-                    onAddProduct={addProductToShoppingList}
-                    onDeleteProduct={deleteProductToShoppingList}
-                    onUpdateProduct={updateProductToShoppingList}
-                    onUpdateShoppingList={updateShoppingList}
-                    shoppingLists={shoppingLists}
-                />
+                <ProtectedRoute>
+                    <ShoppingList
+                        onDeleteShoppingList={deleteShoppingList}
+                        onAddProduct={addProductToShoppingList}
+                        onDeleteProduct={deleteProductToShoppingList}
+                        onUpdateProduct={updateProductToShoppingList}
+                        onUpdateShoppingList={updateShoppingList}
+                        shoppingLists={shoppingLists}
+                    />
+                </ProtectedRoute>
             ),
         },
         {
             path: "/shoppingLists/add",
-            element: <AddShoppingList onAddShoppingList={addShoppingList} />,
+            element: (
+                <ProtectedRoute>
+                    <AddShoppingList onAddShoppingList={addShoppingList} />
+                </ProtectedRoute>
+            ),
         },
         {
             path: "/auth/login",
