@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { useAuth } from "../contexts/authContext";
 
 type Method = "PUT" | "GET" | "DELETE" | "POST";
 
 const baseUrl = "http://localhost:3000";
 
-export default function useUpdateFetch() {
+export default function UseUpdateFetch() {
     const [isLoading, setIsloading] = useState<boolean>(false);
-    // const [data, setData] = useState<T | null>(null);
     const [validationError, setValidationError] = useState<any>(null);
     const [requestError, setRequestError] = useState<string>("");
+
+    const { user } = useAuth();
+
+    console.log("user", user);
 
     async function fetchUpdateApi<Tbody, Tresponse>(
         endpoint: string,
@@ -25,6 +29,7 @@ export default function useUpdateFetch() {
                 method,
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: `Bearer ${user?.token}`,
                 },
                 body: body ? JSON.stringify(body) : null,
             });

@@ -1,6 +1,6 @@
 import React, { FormEvent, useRef } from "react";
 import FormField from "../../components/form/formField/FormField";
-import useUpdateFetch from "../../hooks/useupdateFetch";
+import useUpdateFetch from "../../hooks/useUpdateFetch";
 import { AuthApi, AuthData, AuthResponse } from "../../types/auth";
 import PageLayout from "../../layouts/pageLayout/PageLayout";
 import "./loginPage.scss";
@@ -17,7 +17,6 @@ export default function LoginPage({}: Props) {
     const { fetchUpdateApi, validationError } = useUpdateFetch();
 
     const { user, login } = useAuth();
-    console.log("login", user);
     if (user) {
         return <Navigate to="/" />;
     }

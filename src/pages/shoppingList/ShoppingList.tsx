@@ -141,19 +141,13 @@ function ShoppingList({
                 )}
 
                 <div>
-                    {/* {shoppingList.products.map(product => (
-                        <Product
-                            key={product.id}
-                            product={product}
+                    {shoppingList.products.length && (
+                        <SortProductsByCategory
+                            products={shoppingList.products}
                             onDeleteProduct={onDeleteProduct}
                             onUpdateProduct={onUpdateProduct}
                         />
-                    ))} */}
-                    <SortProductsByCategory
-                        products={shoppingList.products}
-                        onDeleteProduct={onDeleteProduct}
-                        onUpdateProduct={onUpdateProduct}
-                    />
+                    )}
                 </div>
                 <div className="shoppingList__total">Total : {total}</div>
             </div>

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useAuth } from "../contexts/authContext";
 
 type Method = "PUT" | "GET" | "DELETE" | "POST";
 
 const baseUrl = "http://localhost:3000";
 
-export default function useFetch<T>(endPoint: string, method: Method = "GET") {
+export default function UseFetch<T>(endPoint: string, method: Method = "GET") {
     const [isLoading, setIsloading] = useState<boolean>(false);
     const [data, setData] = useState<T | null>(null);
     const [validationError, setValidationError] = useState<any>(null);
     const [requestError, setRequestError] = useState<string>("");
+
+    const { user } = useAuth();
 
     async function fetchApi(body: Partial<T | null> = null, onSuccess?: (data: T) => void) {
         setValidationError(null);
@@ -20,6 +23,7 @@ export default function useFetch<T>(endPoint: string, method: Method = "GET") {
                 method,
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: `Bearer ${user?.token}`,
                 },
                 body: body ? JSON.stringify(body) : null,
             });
@@ -46,7 +50,7 @@ export default function useFetch<T>(endPoint: string, method: Method = "GET") {
         if (method === "GET") {
             fetchApi();
         }
-    }, [endPoint]);
+    }, [endPoint, user]);
 
     return { isLoading, data, setData, requestError, validationError, fetchApi };
 }

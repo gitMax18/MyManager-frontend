@@ -1,6 +1,6 @@
 import React, { FormEvent, useRef, useState } from "react";
 import FormField from "../../components/form/formField/FormField";
-import useUpdateFetch from "../../hooks/useupdateFetch";
+import useUpdateFetch from "../../hooks/useUpdateFetch";
 import { AuthApi, AuthData, AuthResponse } from "../../types/auth";
 import PageLayout from "../../layouts/pageLayout/PageLayout";
 import "./registerPage.scss";

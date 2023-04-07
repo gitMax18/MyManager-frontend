@@ -6,7 +6,7 @@ import { ShoppingListApi, ProductApi, Category } from "./types/shopping";
 import ShoppingList from "./pages/shoppingList/ShoppingList";
 import useFetch from "./hooks/useFetch";
 import { DragDropContext, DraggableLocation, DragUpdate } from "react-beautiful-dnd";
-import useUpdateFetch from "./hooks/useupdateFetch";
+import useUpdateFetch from "./hooks/useUpdateFetch";
 import LoginPage from "./pages/loginPage/LoginPage";
 import RegisterPage from "./pages/registerPage/RegisterPage";
 import AuthContextProvider from "./contexts/authContext";
@@ -111,7 +111,7 @@ function App() {
         });
         if (productIndex === -1) return;
         shoppingLists.splice(shoppingListIndex, 1, { ...shoppingListToUpdate });
-        fetchUpdateApi<ShoppingListApi>(
+        fetchUpdateApi<ShoppingListApi, ShoppingListApi>(
             "/product/" + productToUpdate.id,
             "PUT",
             productToUpdate,
@@ -170,9 +170,7 @@ function App() {
     return (
         <>
             <DragDropContext onDragEnd={handleDragEnd}>
-                <AuthContextProvider>
-                    <RouterProvider router={router} />
-                </AuthContextProvider>
+                <RouterProvider router={router} />
             </DragDropContext>
         </>
     );
